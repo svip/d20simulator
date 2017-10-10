@@ -22,6 +22,7 @@ type sim struct {
 	oldStats []*simStats
 	newStats []*simStats
 	mod int
+	startDc int
 }
 
 func newSim(title string, mod int, basedc int, dctries int) *sim {
@@ -36,6 +37,7 @@ func newSim(title string, mod int, basedc int, dctries int) *sim {
 		oldStats,
 		newStats,
 		mod,
+		basedc,
 	}
 }
 
@@ -104,20 +106,25 @@ func (c *simContainer) DrawGraph() {
 	pointWidth := 4
 	height := 17
 	for _, sim := range c.sims {
-		fmt.Printf("%s: +%d    * = standard, # = new\n", sim.title, sim.mod)
+		fmt.Printf("+%d    * = standard, # = new\n", sim.mod)
 		var oldPoints []point
 		var newPoints []point
 		for _, stat := range sim.oldStats {
-			x := (stat.dc-5) * pointWidth
+			x := (stat.dc-sim.startDc) * pointWidth
 			y := height - int((float64(stat.hits)/float64(stat.runs))*float64(height))
 			oldPoints = append(oldPoints, point{x,y})
 		}
 		for _, stat := range sim.newStats {
-			x := (stat.dc-5) * pointWidth
+			x := (stat.dc-sim.startDc) * pointWidth
 			y := height - int((float64(stat.hits)/float64(stat.runs))*float64(height))
 			newPoints = append(newPoints, point{x,y})
 		}
 		for h := 0; h < height; h++ {
+			if h == 0 {
+				fmt.Printf("100%% ")
+			} else {
+				fmt.Printf("     ")
+			}
 			for w := 0; w < width; w+=pointWidth {
 				foundPoint := false
 				for _, p := range oldPoints {
@@ -143,6 +150,7 @@ func (c *simContainer) DrawGraph() {
 			}
 			fmt.Println()
 		}
+		fmt.Printf("     ")
 		for _, stat := range sim.oldStats {
 			dc := stat.dc
 			if dc >= 10 {
@@ -161,13 +169,17 @@ func main() {
 
 	container := newSimContainer()
 
-	container.addSim("+0", 0, 5, 20)
-	container.addSim("+1", 1, 5, 20)
-	container.addSim("+2", 2, 5, 20)
-	container.addSim("+3", 3, 5, 20)
-	container.addSim("+4", 4, 5, 20)
-	container.addSim("+5", 5, 5, 20)
-	container.addSim("+6", 6, 5, 20)
+	container.addSim("+0", 0, 7, 18)
+	container.addSim("+1", 1, 7, 18)
+	container.addSim("+2", 2, 7, 18)
+	container.addSim("+3", 3, 7, 18)
+	container.addSim("+4", 4, 7, 18)
+	container.addSim("+5", 5, 7, 18)
+	container.addSim("+6", 6, 7, 18)
+	container.addSim("+7", 7, 7, 18)
+	container.addSim("+8", 8, 7, 18)
+	container.addSim("+9", 9, 7, 18)
+	container.addSim("+10", 10, 7, 18)
 
 	max := 10000
 
