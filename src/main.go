@@ -1,8 +1,6 @@
 package main
 
 import (
-	"math/rand"
-	"time"
 	"fmt"
 	"strings"
 )
@@ -10,16 +8,15 @@ import (
 type simStats struct {
 	dc int
 	runs int
-	hits int
-	rerolls int
+	hits float64
 }
 
 func newStat(dc int) *simStats {
-	return &simStats{dc, 0, 0, 0}
+	return &simStats{dc, 0, 0}
 }
 
 func (ss *simStats) fraction() float64 {
-	return (float64(ss.hits)/float64(ss.runs))
+	return (ss.hits/float64(ss.runs))
 }
 
 type sim struct {
@@ -47,20 +44,24 @@ func newSim(mod int, basedc int, dctries int) *sim {
 }
 
 func (s *sim) run(newRules bool, stats *simStats) {
-	result := rand.Intn(20) + 1 // roll d20
-	if newRules && result <= s.mod {
-		stats.rerolls++
-		result = rand.Intn(20) + 1 // re-roll d20
+	// TODO: Rewrite this to use the formula for the whole thing.
+	for i := 1; i <= 20; i++ {
+		if newRules && i <= s.mod {
+			// The formula for whether a roll will succeed is as follows:
+			// 20 - DC + mod + 1 / 20
+			stats.hits += (20.0-float64(stats.dc)+float64(s.mod)+1.0)/20.0
+		} else {
+			if i == 20 {
+				stats.hits++
+			} else if i != 1 && i + s.mod >= stats.dc { // 1 always fails (not critical)
+				stats.hits++
+			}
+		}
+		stats.runs++
 	}
-	if result == 20 { // a 20 always hits
-		stats.hits++
-	} else if result != 1 && result + s.mod >= stats.dc { // 1 always fails (not critical)
-		stats.hits++
-	}
-	stats.runs++
 }
 
-func (s *sim) RunOnce() {
+func (s *sim) RunAll() {
 	for _, simStat := range s.oldStats {
 		s.run(false, simStat)
 	}
@@ -71,11 +72,11 @@ func (s *sim) RunOnce() {
 
 func (s *sim) PrintStats() {
 	fmt.Printf("Ability mod: +%d\n", s.mod)
-	fmt.Printf("DC\tStandard\tHouse\tHouse rerolls\n")
+	fmt.Printf("DC\tStandard\tHouse\n")
 	for i := 0; i < s.attempts; i++ {
 		oldStat := s.oldStats[i]
 		newStat := s.newStats[i]
-		fmt.Printf("%d\t%.2f\t%.2f\t%d\n", oldStat.dc, oldStat.fraction()*100.0, newStat.fraction()*100.0, newStat.rerolls)
+		fmt.Printf("%d\t%.4f\t%.4f\n", oldStat.dc, oldStat.fraction(), newStat.fraction())
 	}
 	fmt.Println()
 }
@@ -92,9 +93,9 @@ func (c *simContainer) addSim(mod int, basedc int, dctries int) {
 	c.sims = append(c.sims, newSim(mod, basedc, dctries))
 }
 
-func (c *simContainer) RunAllOnce() {
+func (c *simContainer) RunAll() {
 	for _, sim := range c.sims {
-		sim.RunOnce()
+		sim.RunAll()
 	}
 }
 
@@ -179,8 +180,6 @@ func (c *simContainer) DrawGraph() {
 }
 
 func main() {
-	rand.Seed(time.Now().UnixNano())
-
 	container := newSimContainer()
 
 	container.addSim(0, 1, 18)
@@ -195,11 +194,7 @@ func main() {
 	container.addSim(9, 10, 18)
 	container.addSim(10, 11, 18)
 
-	max := 100000
-
-	for i := 0; i < max; i++ {
-		container.RunAllOnce()
-	}
+	container.RunAll()
 
 	container.PrintAllStats()
 	container.DrawGraph()
