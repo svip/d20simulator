@@ -52,7 +52,9 @@ func (s *sim) run(newRules bool, stats *simStats) {
 		stats.rerolls++
 		result = rand.Intn(20) + 1 // re-roll d20
 	}
-	if result + s.mod >= stats.dc {
+	if result == 20 { // a 20 always hits
+		stats.hits++
+	} else if result != 1 && result + s.mod >= stats.dc { // 1 always fails (not critical)
 		stats.hits++
 	}
 	stats.runs++

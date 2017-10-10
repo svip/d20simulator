@@ -17,28 +17,28 @@ Y-axis is the DCs tried.
 
     +0    * = standard, # = house, @ = both
 
-    100%  @                                                                      
+    100%                                                                         
                                                                                  
-              @                                                                  
+          @   @                                                                  
                   @                                                              
                       @                                                          
-                          @                                                      
-                                                                                 
+                          #                                                      
+                          *                                                      
                               @                                                  
                                   @                                              
                                       @                                          
-                                                                                 
-                                          @                                      
+                                          #                                      
+                                          *                                      
                                               @                                  
                                                   @                              
                                                       @                          
-                                                                                 
-                                                          @                      
+                                                          #                      
+                                                          *                      
                                                               @                  
                                                                   @              
                                                                       @          
-                                                                          #      
-                                                                          *      
+                                                                          @      
+                                                                                 
                                                                               @  
                                                                                  
       0%                                                                         
@@ -48,18 +48,18 @@ Y-axis is the DCs tried.
 
     +1    * = standard, # = house, @ = both
 
-    100%  @                                                                      
-              #                                                                  
-              *   #                                                              
+    100%                                                                         
+          #   #                                                                  
+          *   *   #                                                              
                   *   #                                                          
                       *   #                                                      
-                          *                                                      
-                              #                                                  
+                                                                                 
+                          *   #                                                  
                               *   #                                              
                                   *   #                                          
                                       *                                          
-                                          #                                      
-                                          *   #                                  
+                                          @                                      
+                                              #                                  
                                               *   #                              
                                                   *                              
                                                       @                          
@@ -79,23 +79,23 @@ Y-axis is the DCs tried.
 
     +2    * = standard, # = house, @ = both
 
-    100%  @                                                                      
-              #   #                                                              
-              *       #                                                          
-                  *                                                              
-                      *   #                                                      
+    100%                                                                         
+          #   #   #                                                              
+          *   *       #                                                          
+                  *       #                                                      
+                      *                                                          
                               #                                                  
                           *       #                                              
                               *                                                  
                                   *   #                                          
                                       *   #                                      
-                                          *   #                                  
-                                                                                 
+                                              #                                  
+                                          *                                      
                                               *   #                              
                                                   *   #                          
                                                       *                          
-                                                          #                      
-                                                          *   #                  
+                                                          @                      
+                                                              #                  
                                                               *   #              
                                                                   *              
                                                                       @          
@@ -110,9 +110,9 @@ Y-axis is the DCs tried.
 
     +3    * = standard, # = house, @ = both
 
-    100%  @                                                                      
-              #   #   #                                                          
-              *                                                                  
+    100%                                                                         
+          #   #   #   #                                                          
+          *   *                                                                  
                   *       #                                                      
                       *       #                                                  
                           *       #                                              
@@ -141,9 +141,9 @@ Y-axis is the DCs tried.
 
     +4    * = standard, # = house, @ = both
 
-    100%  @                                                                      
-              #   #   #   #                                                      
-              *                                                                  
+    100%                                                                         
+          #   #   #   #   #                                                      
+          *   *                                                                  
                   *           #                                                  
                       *           #                                              
                           *                                                      
@@ -156,9 +156,9 @@ Y-axis is the DCs tried.
                                               *       #                          
                                                   *       #                      
                                                       *                          
-                                                          *   #                  
-                                                                                 
-                                                              *   #              
+                                                              #                  
+                                                          *       #              
+                                                              *                  
                                                                   *   #          
                                                                       *   #      
                                                                           *      
@@ -172,9 +172,9 @@ Y-axis is the DCs tried.
 
     +5    * = standard, # = house, @ = both
 
-    100%  @                                                                      
-              #   #   #                                                          
-              *           #   #                                                  
+    100%                                                                         
+          #   #   #   #                                                          
+          *   *           #   #                                                  
                   *                                                              
                       *           #                                              
                                       #                                          
@@ -203,13 +203,13 @@ Y-axis is the DCs tried.
 
     +6    * = standard, # = house, @ = both
 
-    100%  @                                                                      
-              #   #                                                              
-              *       #   #   #                                                  
+    100%                                                                         
+          #   #   #                                                              
+          *   *       #   #   #                                                  
                   *               #                                              
                       *               #                                          
-                                                                                 
-                          *               #                                      
+                          *                                                      
+                                          #                                      
                               *                                                  
                                   *           #                                  
                                       *           #                              
@@ -234,9 +234,9 @@ Y-axis is the DCs tried.
 
     +7    * = standard, # = house, @ = both
 
-    100%  @                                                                      
-              #   #                                                              
-              *       #   #                                                      
+    100%                                                                         
+          #   #   #                                                              
+          *   *       #   #                                                      
                   *           #   #                                              
                       *               #                                          
                                           #                                      
@@ -244,13 +244,13 @@ Y-axis is the DCs tried.
                               *               #                                  
                                   *                                              
                                       *           #                              
-                                                      #                          
-                                          *                                      
+                                          *           #                          
+                                                                                 
                                               *           #                      
                                                   *                              
                                                       *       #                  
-                                                          *       #              
-                                                                                 
+                                                                  #              
+                                                          *                      
                                                               *       #          
                                                                   *              
                                                                       *   #      
@@ -265,26 +265,26 @@ Y-axis is the DCs tried.
 
     +8    * = standard, # = house, @ = both
 
-    100%  @                                                                      
-              #   #                                                              
-              *       #                                                          
-                  *       #   #                                                  
-                      *           #   #                                          
+    100%                                                                         
+          #   #                                                                  
+          *   *   #   #                                                          
+                  *       #   #   #                                              
+                      *               #                                          
                                           #                                      
                           *                   #                                  
                               *                                                  
                                   *               #                              
                                       *                                          
-                                          *           #                          
-                                                          #                      
-                                              *                                  
+                                                      #                          
+                                          *                                      
+                                              *           #                      
                                                   *           #                  
                                                       *                          
                                                           *       #              
                                                                                  
                                                               *       #          
-                                                                  *              
-                                                                      *   #      
+                                                                  *       #      
+                                                                      *          
                                                                           *   #  
                                                                                  
                                                                               *  
@@ -296,9 +296,9 @@ Y-axis is the DCs tried.
 
     +9    * = standard, # = house, @ = both
 
-    100%  @                                                                      
-              #                                                                  
-              *   #   #                                                          
+    100%                                                                         
+          #   #                                                                  
+          *   *   #   #                                                          
                   *       #   #                                                  
                       *           #   #                                          
                           *               #                                      
@@ -306,8 +306,8 @@ Y-axis is the DCs tried.
                               *                   #                              
                                   *                                              
                                       *               #                          
-                                                                                 
-                                          *               #                      
+                                          *                                      
+                                                          #                      
                                               *                                  
                                                   *           #                  
                                                       *                          
@@ -316,8 +316,8 @@ Y-axis is the DCs tried.
                                                               *                  
                                                                   *       #      
                                                                       *          
-                                                                          *   #  
-                                                                                 
+                                                                              #  
+                                                                          *      
                                                                               *  
                                                                                  
       0%                                                                         
@@ -327,18 +327,18 @@ Y-axis is the DCs tried.
 
     +10    * = standard, # = house, @ = both
 
-    100%  @                                                                      
-              #                                                                  
-              *   #   #                                                          
+    100%                                                                         
+          #   #                                                                  
+          *   *   #   #                                                          
                   *       #                                                      
                       *       #   #                                              
-                          *           #   #                                      
-                                              #                                  
+                          *           #                                          
+                                          #   #                                  
                               *                   #                              
                                   *                                              
                                       *               #                          
-                                          *                                      
                                                           #                      
+                                          *                                      
                                               *               #                  
                                                   *                              
                                                       *           #              
@@ -347,8 +347,8 @@ Y-axis is the DCs tried.
                                                               *                  
                                                                   *       #      
                                                                       *          
-                                                                          *   #  
-                                                                                 
+                                                                              #  
+                                                                          *      
                                                                               *  
                                                                                  
       0%                                                                         
