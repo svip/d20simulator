@@ -17,16 +17,17 @@ func newStats() *simStats {
 }
 
 type sim struct {
-	regularStats *simStats
-	newStats *simStats
+	title string
+	stats []*simStats
 	mod int
 	dc int
 }
 
-func newSim(mod int, dc int) sim {
-	return sim{
-		newStats(),
-		newStats(),
+func newSim(title string, mod int, dc int) *sim {
+	stats := []*simStats{newStats(), newStats()}
+	return &sim{
+		title,
+		stats,
 		mod,
 		dc,
 	}
@@ -45,39 +46,81 @@ func (s *sim) run(newRules bool, stats *simStats) {
 }
 
 func (s *sim) RunOnce() {
-	s.run(false, s.regularStats)
-	s.run(true, s.newStats)
+	s.run(false, s.stats[0])
+	s.run(true, s.stats[1])
 }
 
-func (s *sim) PrintStats(title string) {
-	fmt.Println(title)
+func (s *sim) PrintStats() {
+	fmt.Println(s.title)
 	fmt.Printf("Ability mod: +%d, DC: %d\n", s.mod, s.dc)
-	fmt.Printf("Standard rules: Runs: %d, Hits: %d, Percentage: %.2f %%\n", s.regularStats.runs, s.regularStats.hits,
-			(float64(s.regularStats.hits)/float64(s.regularStats.runs))*100.0)
-	fmt.Printf("Standard rules: Runs: %d, Hits: %d, Percentage: %.2f %% (re-rolls: %d)\n", s.newStats.runs, s.newStats.hits,
-			(float64(s.newStats.hits)/float64(s.newStats.runs))*100.0, s.newStats.rerolls)
+	fmt.Printf("Standard rules: Runs: %d, Hits: %d, Percentage: %.2f %%\n", s.stats[0].runs, s.stats[0].hits,
+			(float64(s.stats[0].hits)/float64(s.stats[0].runs))*100.0)
+	fmt.Printf("Standard rules: Runs: %d, Hits: %d, Percentage: %.2f %% (re-rolls: %d)\n", s.stats[1].runs, s.stats[1].hits,
+			(float64(s.stats[1].hits)/float64(s.stats[1].runs))*100.0, s.stats[1].rerolls)
 	fmt.Println()
+}
+
+type simContainer struct {
+	sims []*sim
+}
+
+func newSimContainer() simContainer{
+	return simContainer{}
+}
+
+func (c *simContainer) addSim(title string, mod int, dc int) {
+	c.sims = append(c.sims, newSim(title, mod, dc))
+}
+
+func (c *simContainer) RunAllOnce() {
+	for _, sim := range c.sims {
+		sim.RunOnce()
+	}
+}
+
+func (c *simContainer) PrintAllStats() {
+	for _, sim := range c.sims {
+		sim.PrintStats()
+	}
+}
+
+type graphPoint struct {
+	newRule bool
+	x int
+	y int
+}
+
+func (c *simContainer) DrawGraph() {
+	/*width := 70
+	height := 20
+	for _, sim := range c.sims {
+
+	}*/
 }
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
 
-	lowvhigh := newSim(2, 20)
-	highvlow := newSim(5, 10)
-	highvhigh := newSim(5, 20)
-	lowvlow := newSim(2, 10)
+	container := newSimContainer()
+
+	container.addSim("Low vs. high", 1, 20)
+	container.addSim("High vs. low", 5, 10)
+	container.addSim("High vs. high", 5, 20)
+	container.addSim("Low vs. low", 1, 10)
+
+	container.addSim("Long sword vs low", 6, 12)
+	container.addSim("Long sword vs high", 6, 17)
+	container.addSim("Javelin vs low", 5, 12)
+	container.addSim("Javelin vs high", 5, 17)
+	container.addSim("Quarterstaff vs low", 2, 12)
+	container.addSim("Quarterstaff vs high", 2, 17)
 
 	max := 10000
 
 	for i := 0; i < max; i++ {
-		lowvhigh.RunOnce()
-		highvlow.RunOnce()
-		highvhigh.RunOnce()
-		lowvlow.RunOnce()
+		container.RunAllOnce()
 	}
 
-	lowvhigh.PrintStats("Low vs. high")
-	highvlow.PrintStats("High vs. low")
-	highvhigh.PrintStats("High vs. high")
-	lowvlow.PrintStats("Low vs. low")
+	container.PrintAllStats()
+	container.DrawGraph()
 }
