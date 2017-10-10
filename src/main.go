@@ -18,15 +18,19 @@ func newStat(dc int) *simStats {
 	return &simStats{dc, 0, 0, 0}
 }
 
+func (ss *simStats) fraction() float64 {
+	return (float64(ss.hits)/float64(ss.runs))
+}
+
 type sim struct {
-	title string
 	oldStats []*simStats
 	newStats []*simStats
 	mod int
 	startDc int
+	attempts int
 }
 
-func newSim(title string, mod int, basedc int, dctries int) *sim {
+func newSim(mod int, basedc int, dctries int) *sim {
 	var oldStats []*simStats
 	var newStats []*simStats
 	for i := 0; i < dctries; i++ {
@@ -34,11 +38,11 @@ func newSim(title string, mod int, basedc int, dctries int) *sim {
 		newStats = append(newStats, newStat(basedc+i))
 	}
 	return &sim{
-		title,
 		oldStats,
 		newStats,
 		mod,
 		basedc,
+		dctries,
 	}
 }
 
@@ -64,12 +68,13 @@ func (s *sim) RunOnce() {
 }
 
 func (s *sim) PrintStats() {
-	fmt.Println(s.title)
-	fmt.Printf("Ability mod: +%d, DC: %d\n", s.mod, s.oldStats[0].dc)
-	fmt.Printf("Standard rules: Runs: %d, Hits: %d, Percentage: %.2f %%\n", s.oldStats[0].runs, s.oldStats[0].hits,
-			(float64(s.oldStats[0].hits)/float64(s.oldStats[0].runs))*100.0)
-	fmt.Printf("New rules: Runs: %d, Hits: %d, Percentage: %.2f %% (re-rolls: %d)\n", s.newStats[1].runs, s.newStats[1].hits,
-			(float64(s.newStats[1].hits)/float64(s.newStats[1].runs))*100.0, s.newStats[1].rerolls)
+	fmt.Printf("Ability mod: +%d\n", s.mod)
+	fmt.Printf("DC\tStandard\tHouse\tHouse rerolls\n")
+	for i := 0; i < s.attempts; i++ {
+		oldStat := s.oldStats[i]
+		newStat := s.newStats[i]
+		fmt.Printf("%d\t%.2f\t%.2f\t%d\n", oldStat.dc, oldStat.fraction()*100.0, newStat.fraction()*100.0, newStat.rerolls)
+	}
 	fmt.Println()
 }
 
@@ -81,8 +86,8 @@ func newSimContainer() simContainer{
 	return simContainer{}
 }
 
-func (c *simContainer) addSim(title string, mod int, basedc int, dctries int) {
-	c.sims = append(c.sims, newSim(title, mod, basedc, dctries))
+func (c *simContainer) addSim(mod int, basedc int, dctries int) {
+	c.sims = append(c.sims, newSim(mod, basedc, dctries))
 }
 
 func (c *simContainer) RunAllOnce() {
@@ -112,12 +117,12 @@ func (c *simContainer) DrawGraph() {
 		var newPoints []point
 		for _, stat := range sim.oldStats {
 			x := (stat.dc-sim.startDc) * pointWidth
-			y := height - int((float64(stat.hits)/float64(stat.runs))*float64(height))
+			y := height - int(stat.fraction()*float64(height))
 			oldPoints = append(oldPoints, point{x,y})
 		}
 		for _, stat := range sim.newStats {
 			x := (stat.dc-sim.startDc) * pointWidth
-			y := height - int((float64(stat.hits)/float64(stat.runs))*float64(height))
+			y := height - int(stat.fraction()*float64(height))
 			newPoints = append(newPoints, point{x,y})
 		}
 		fmt.Println()
@@ -176,17 +181,17 @@ func main() {
 
 	container := newSimContainer()
 
-	container.addSim("+0", 0, 1, 18)
-	container.addSim("+1", 1, 2, 18)
-	container.addSim("+2", 2, 3, 18)
-	container.addSim("+3", 3, 4, 18)
-	container.addSim("+4", 4, 5, 18)
-	container.addSim("+5", 5, 6, 18)
-	container.addSim("+6", 6, 7, 18)
-	container.addSim("+7", 7, 8, 18)
-	container.addSim("+8", 8, 9, 18)
-	container.addSim("+9", 9, 10, 18)
-	container.addSim("+10", 10, 11, 18)
+	container.addSim(0, 1, 18)
+	container.addSim(1, 2, 18)
+	container.addSim(2, 3, 18)
+	container.addSim(3, 4, 18)
+	container.addSim(4, 5, 18)
+	container.addSim(5, 6, 18)
+	container.addSim(6, 7, 18)
+	container.addSim(7, 8, 18)
+	container.addSim(8, 9, 18)
+	container.addSim(9, 10, 18)
+	container.addSim(10, 11, 18)
 
 	max := 100000
 
