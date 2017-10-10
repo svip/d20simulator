@@ -7,29 +7,35 @@ import (
 )
 
 type simStats struct {
+	dc int
 	runs int
 	hits int
 	rerolls int
 }
 
-func newStats() *simStats {
-	return &simStats{}
+func newStat(dc int) *simStats {
+	return &simStats{dc, 0, 0, 0}
 }
 
 type sim struct {
 	title string
-	stats []*simStats
+	oldStats []*simStats
+	newStats []*simStats
 	mod int
-	dc int
 }
 
-func newSim(title string, mod int, dc int) *sim {
-	stats := []*simStats{newStats(), newStats()}
+func newSim(title string, mod int, basedc int, dctries int) *sim {
+	var oldStats []*simStats
+	var newStats []*simStats
+	for i := 0; i < dctries; i++ {
+		oldStats = append(oldStats, newStat(basedc+i))
+		newStats = append(newStats, newStat(basedc+i))
+	}
 	return &sim{
 		title,
-		stats,
+		oldStats,
+		newStats,
 		mod,
-		dc,
 	}
 }
 
@@ -39,24 +45,28 @@ func (s *sim) run(newRules bool, stats *simStats) {
 		stats.rerolls++
 		result = rand.Intn(20) + 1 // re-roll d20
 	}
-	if result + s.mod >= s.dc {
+	if result + s.mod >= stats.dc {
 		stats.hits++
 	}
 	stats.runs++
 }
 
 func (s *sim) RunOnce() {
-	s.run(false, s.stats[0])
-	s.run(true, s.stats[1])
+	for _, simStat := range s.oldStats {
+		s.run(false, simStat)
+	}
+	for _, simStat := range s.newStats {
+		s.run(true, simStat)
+	}
 }
 
 func (s *sim) PrintStats() {
 	fmt.Println(s.title)
-	fmt.Printf("Ability mod: +%d, DC: %d\n", s.mod, s.dc)
-	fmt.Printf("Standard rules: Runs: %d, Hits: %d, Percentage: %.2f %%\n", s.stats[0].runs, s.stats[0].hits,
-			(float64(s.stats[0].hits)/float64(s.stats[0].runs))*100.0)
-	fmt.Printf("Standard rules: Runs: %d, Hits: %d, Percentage: %.2f %% (re-rolls: %d)\n", s.stats[1].runs, s.stats[1].hits,
-			(float64(s.stats[1].hits)/float64(s.stats[1].runs))*100.0, s.stats[1].rerolls)
+	fmt.Printf("Ability mod: +%d, DC: %d\n", s.mod, s.oldStats[0].dc)
+	fmt.Printf("Standard rules: Runs: %d, Hits: %d, Percentage: %.2f %%\n", s.oldStats[0].runs, s.oldStats[0].hits,
+			(float64(s.oldStats[0].hits)/float64(s.oldStats[0].runs))*100.0)
+	fmt.Printf("New rules: Runs: %d, Hits: %d, Percentage: %.2f %% (re-rolls: %d)\n", s.newStats[1].runs, s.newStats[1].hits,
+			(float64(s.newStats[1].hits)/float64(s.newStats[1].runs))*100.0, s.newStats[1].rerolls)
 	fmt.Println()
 }
 
@@ -68,8 +78,8 @@ func newSimContainer() simContainer{
 	return simContainer{}
 }
 
-func (c *simContainer) addSim(title string, mod int, dc int) {
-	c.sims = append(c.sims, newSim(title, mod, dc))
+func (c *simContainer) addSim(title string, mod int, basedc int, dctries int) {
+	c.sims = append(c.sims, newSim(title, mod, basedc, dctries))
 }
 
 func (c *simContainer) RunAllOnce() {
@@ -84,18 +94,66 @@ func (c *simContainer) PrintAllStats() {
 	}
 }
 
-type graphPoint struct {
-	newRule bool
+type point struct {
 	x int
 	y int
 }
 
 func (c *simContainer) DrawGraph() {
-	/*width := 70
-	height := 20
+	width := 70
+	pointWidth := 4
+	height := 17
 	for _, sim := range c.sims {
-
-	}*/
+		fmt.Printf("%s: +%d    * = standard, # = new\n", sim.title, sim.mod)
+		var oldPoints []point
+		var newPoints []point
+		for _, stat := range sim.oldStats {
+			x := (stat.dc-5) * pointWidth
+			y := height - int((float64(stat.hits)/float64(stat.runs))*float64(height))
+			oldPoints = append(oldPoints, point{x,y})
+		}
+		for _, stat := range sim.newStats {
+			x := (stat.dc-5) * pointWidth
+			y := height - int((float64(stat.hits)/float64(stat.runs))*float64(height))
+			newPoints = append(newPoints, point{x,y})
+		}
+		for h := 0; h < height; h++ {
+			for w := 0; w < width; w+=pointWidth {
+				foundPoint := false
+				for _, p := range oldPoints {
+					if p.x == w && p.y == h {
+						fmt.Printf(" *")
+						foundPoint = true
+					}
+				}
+				if !foundPoint {
+					for _, p := range newPoints {
+						if p.x == w && p.y == h {
+							fmt.Printf(" #")
+							foundPoint = true
+						}
+					}
+				}
+				if !foundPoint {
+					fmt.Printf("  ")
+				}
+				for i := 2; i < pointWidth; i++ {
+					fmt.Printf(" ")
+				}
+			}
+			fmt.Println()
+		}
+		for _, stat := range sim.oldStats {
+			dc := stat.dc
+			if dc >= 10 {
+				fmt.Printf("%d  ", dc)
+			} else {
+				fmt.Printf(" %d  ", dc)
+			}
+		}
+		fmt.Println()
+		fmt.Println()
+	}
 }
 
 func main() {
@@ -103,17 +161,13 @@ func main() {
 
 	container := newSimContainer()
 
-	container.addSim("Low vs. high", 1, 20)
-	container.addSim("High vs. low", 5, 10)
-	container.addSim("High vs. high", 5, 20)
-	container.addSim("Low vs. low", 1, 10)
-
-	container.addSim("Long sword vs low", 6, 12)
-	container.addSim("Long sword vs high", 6, 17)
-	container.addSim("Javelin vs low", 5, 12)
-	container.addSim("Javelin vs high", 5, 17)
-	container.addSim("Quarterstaff vs low", 2, 12)
-	container.addSim("Quarterstaff vs high", 2, 17)
+	container.addSim("+0", 0, 5, 20)
+	container.addSim("+1", 1, 5, 20)
+	container.addSim("+2", 2, 5, 20)
+	container.addSim("+3", 3, 5, 20)
+	container.addSim("+4", 4, 5, 20)
+	container.addSim("+5", 5, 5, 20)
+	container.addSim("+6", 6, 5, 20)
 
 	max := 10000
 
