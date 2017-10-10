@@ -107,7 +107,7 @@ func (c *simContainer) DrawGraph() {
 	pointWidth := 4
 	height := 25
 	for _, sim := range c.sims {
-		fmt.Printf("+%d    * = standard, # = new, @ = both\n", sim.mod)
+		fmt.Printf("+%d    * = standard, # = house, @ = both\n", sim.mod)
 		var oldPoints []point
 		var newPoints []point
 		for _, stat := range sim.oldStats {

@@ -15,7 +15,7 @@ The program yields a program of modifiers +0 through +10 with varies DCs, beginn
 X-axis is the percentage of hits (all the way at the top text is 100%).
 Y-axis is the DCs tried.
 
-    +0    * = standard, # = new, @ = both
+    +0    * = standard, # = house, @ = both
 
     100%  @                                                                      
                                                                                  
@@ -46,7 +46,7 @@ Y-axis is the DCs tried.
      DC:  1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  
 
 
-    +1    * = standard, # = new, @ = both
+    +1    * = standard, # = house, @ = both
 
     100%  @                                                                      
               #                                                                  
@@ -77,7 +77,7 @@ Y-axis is the DCs tried.
      DC:  2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  
 
 
-    +2    * = standard, # = new, @ = both
+    +2    * = standard, # = house, @ = both
 
     100%  @                                                                      
               #   #                                                              
@@ -108,7 +108,7 @@ Y-axis is the DCs tried.
      DC:  3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20  
 
 
-    +3    * = standard, # = new, @ = both
+    +3    * = standard, # = house, @ = both
 
     100%  @                                                                      
               #   #   #                                                          
@@ -139,7 +139,7 @@ Y-axis is the DCs tried.
      DC:  4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20  21  
 
 
-    +4    * = standard, # = new, @ = both
+    +4    * = standard, # = house, @ = both
 
     100%  @                                                                      
               #   #   #   #                                                      
@@ -170,7 +170,7 @@ Y-axis is the DCs tried.
      DC:  5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20  21  22  
 
 
-    +5    * = standard, # = new, @ = both
+    +5    * = standard, # = house, @ = both
 
     100%  @                                                                      
               #   #   #                                                          
@@ -201,7 +201,7 @@ Y-axis is the DCs tried.
      DC:  6   7   8   9  10  11  12  13  14  15  16  17  18  19  20  21  22  23  
 
 
-    +6    * = standard, # = new, @ = both
+    +6    * = standard, # = house, @ = both
 
     100%  @                                                                      
               #   #                                                              
@@ -232,7 +232,7 @@ Y-axis is the DCs tried.
      DC:  7   8   9  10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  
 
 
-    +7    * = standard, # = new, @ = both
+    +7    * = standard, # = house, @ = both
 
     100%  @                                                                      
               #   #                                                              
@@ -263,7 +263,7 @@ Y-axis is the DCs tried.
      DC:  8   9  10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  
 
 
-    +8    * = standard, # = new, @ = both
+    +8    * = standard, # = house, @ = both
 
     100%  @                                                                      
               #   #                                                              
@@ -294,7 +294,7 @@ Y-axis is the DCs tried.
      DC:  9  10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  26  
 
 
-    +9    * = standard, # = new, @ = both
+    +9    * = standard, # = house, @ = both
 
     100%  @                                                                      
               #                                                                  
@@ -325,7 +325,7 @@ Y-axis is the DCs tried.
      DC: 10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  26  27  
 
 
-    +10    * = standard, # = new, @ = both
+    +10    * = standard, # = house, @ = both
 
     100%  @                                                                      
               #                                                                  
