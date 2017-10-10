@@ -4,6 +4,7 @@ import (
 	"math/rand"
 	"time"
 	"fmt"
+	"strings"
 )
 
 type simStats struct {
@@ -104,9 +105,9 @@ type point struct {
 func (c *simContainer) DrawGraph() {
 	width := 70
 	pointWidth := 4
-	height := 17
+	height := 25
 	for _, sim := range c.sims {
-		fmt.Printf("+%d    * = standard, # = new\n", sim.mod)
+		fmt.Printf("+%d    * = standard, # = new, @ = both\n", sim.mod)
 		var oldPoints []point
 		var newPoints []point
 		for _, stat := range sim.oldStats {
@@ -119,46 +120,52 @@ func (c *simContainer) DrawGraph() {
 			y := height - int((float64(stat.hits)/float64(stat.runs))*float64(height))
 			newPoints = append(newPoints, point{x,y})
 		}
+		fmt.Println()
 		for h := 0; h < height; h++ {
 			if h == 0 {
 				fmt.Printf("100%% ")
+			} else if h == height -1 {
+				fmt.Printf("  0%% ")
 			} else {
-				fmt.Printf("     ")
+				fmt.Printf(strings.Repeat(" ", 5))
 			}
 			for w := 0; w < width; w+=pointWidth {
-				foundPoint := false
+				foundPoint := []bool{false, false}
 				for _, p := range oldPoints {
 					if p.x == w && p.y == h {
-						fmt.Printf(" *")
-						foundPoint = true
+						foundPoint[0] = true
 					}
 				}
-				if !foundPoint {
-					for _, p := range newPoints {
-						if p.x == w && p.y == h {
-							fmt.Printf(" #")
-							foundPoint = true
-						}
+				for _, p := range newPoints {
+					if p.x == w && p.y == h {
+						foundPoint[1] = true
 					}
 				}
-				if !foundPoint {
+				if foundPoint[0] && foundPoint[1] {
+					fmt.Printf(" @")
+				} else if foundPoint[0] {
+					fmt.Printf(" *")
+				} else if foundPoint[1] {
+					fmt.Printf(" #")
+				} else {
 					fmt.Printf("  ")
 				}
-				for i := 2; i < pointWidth; i++ {
-					fmt.Printf(" ")
-				}
+				fmt.Printf(strings.Repeat(" ", pointWidth-2))
 			}
 			fmt.Println()
 		}
-		fmt.Printf("     ")
+		fmt.Println()
+		fmt.Printf(" DC: ")
 		for _, stat := range sim.oldStats {
 			dc := stat.dc
 			if dc >= 10 {
-				fmt.Printf("%d  ", dc)
+				fmt.Printf("%d", dc)
 			} else {
-				fmt.Printf(" %d  ", dc)
+				fmt.Printf(" %d", dc)
 			}
+			fmt.Printf(strings.Repeat(" ", pointWidth-2))
 		}
+		fmt.Println()
 		fmt.Println()
 		fmt.Println()
 	}
@@ -169,19 +176,19 @@ func main() {
 
 	container := newSimContainer()
 
-	container.addSim("+0", 0, 7, 18)
-	container.addSim("+1", 1, 7, 18)
-	container.addSim("+2", 2, 7, 18)
-	container.addSim("+3", 3, 7, 18)
-	container.addSim("+4", 4, 7, 18)
-	container.addSim("+5", 5, 7, 18)
+	container.addSim("+0", 0, 1, 18)
+	container.addSim("+1", 1, 2, 18)
+	container.addSim("+2", 2, 3, 18)
+	container.addSim("+3", 3, 4, 18)
+	container.addSim("+4", 4, 5, 18)
+	container.addSim("+5", 5, 6, 18)
 	container.addSim("+6", 6, 7, 18)
-	container.addSim("+7", 7, 7, 18)
-	container.addSim("+8", 8, 7, 18)
-	container.addSim("+9", 9, 7, 18)
-	container.addSim("+10", 10, 7, 18)
+	container.addSim("+7", 7, 8, 18)
+	container.addSim("+8", 8, 9, 18)
+	container.addSim("+9", 9, 10, 18)
+	container.addSim("+10", 10, 11, 18)
 
-	max := 10000
+	max := 100000
 
 	for i := 0; i < max; i++ {
 		container.RunAllOnce()
